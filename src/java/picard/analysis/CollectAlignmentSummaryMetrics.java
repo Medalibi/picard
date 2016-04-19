@@ -83,6 +83,8 @@ public class CollectAlignmentSummaryMetrics extends SinglePassSamProgram {
             "alignments as well as the proportion of the reads that passed machine signal-to-noise threshold quality filters. " +
             "Note that these quality filters are specific to Illumina data; for additional information, please see the corresponding " +
             "<a href='https://www.broadinstitute.org/gatk/guide/article?id=6329'>GATK Dictionary entry</a>. </p>" +
+            "" +
+            "Note: For all Picard tools, headers that refer to PCT in the output metrics files, are referring to a fraction, not percentage." +
 
             "<h4>Usage example:</h4>" +
             "<pre>" +
