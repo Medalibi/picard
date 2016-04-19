@@ -73,19 +73,49 @@ import java.util.concurrent.TimeUnit;
  * @author jburke@broadinstitute.org
  */
 @CommandLineProgramProperties(
-        usage = "Determine the sample barcode for each read in an Illumina lane.\n" +
-                "For each tile, a file is written to the basecalls directory of the form s_<lane>_<tile>_barcode.txt. " +
-                "An output file contains a line for each read in the tile, aligned with the regular basecall output. \n" +
-                "The output file contains the following tab-separated columns: \n" +
-                "    * read subsequence at barcode position\n" +
-                "    * Y or N indicating if there was a barcode match\n" +
-                "    * matched barcode sequence\n" +
-                "Note 1: that the order of specification of barcodes can cause arbitrary differences in output for poorly matching barcodes.\n" +
-                "Note 2: molecular barcodes (M in the read structure) are not the barcode being extracted here and will be ignored here.\n\n",
-        usageShort = "Tool to determine the barcode for each read in an Illumina lane",
+
+        usage = ExtractIlluminaBarcodes.USAGE_SUMMARY + ExtractIlluminaBarcodes.USAGE_DETAILS,
+        usageShort = ExtractIlluminaBarcodes.USAGE_SUMMARY,
         programGroup = Illumina.class
 )
 public class ExtractIlluminaBarcodes extends CommandLineProgram {
+    static final String USAGE_SUMMARY = "Tool to determine the barcode for each read in an Illumina lane.  ";
+    static final String USAGE_DETAILS = "<p> This tool will identify reads containing barcodes and output statistics indicating the numbers " +
+            "of reads containing barcode-matching sequences.</p> " +
+            "<p>Illumina sequences can contain at least two types of barcodes, sample and molecular (index).  Sample barcodes (B in the read structure) are used to " +
+            "demultiplex pooled samples while index barcodes (M in the read structure) are used to differentiate multiple reads of a template when carrying out paired-end sequencing.  Note that this tool only extracts sample (B) and not molecular barcodes (M).</p>" +
+            "<p>Barcodes can be provided in the form of a list (BARCODE_FILE) or a string representing the barcode (BARCODE).  " +
+            "The BARCODE_FILE contains multiple fields including 'barcode_sequence_1', 'barcode_sequence_2' (optional), " +
+            "'barcode_name', and 'library_name'.  In contrast, the BARCODE argument is used for runs with reads containing a single barcode (nonmultiplexed) and can be added directly " +
+            "as a string of text e.g. BARCODE=CAATAGCG.</p>" +
+            "" +
+            "<p>Data is output per lane/tile within the BaseCalls directory with the file name format of 's_{lane}_{tile}_barcode.txt'.  " +
+            "These files contain the following tab-separated columns:" +
+            "<ul> " +
+            "<li>Read subsequence at barcode position</li>" +
+            "<li>Y or N indicating if there was a barcode match</li>" +
+            "<li>Matched barcode sequence (empty if read did not match one of the barcodes)</li>  " +
+            "</ul>" +
+            "If there is no match but we're close to the threshold of calling it a match, we output the barcode that would have been " +
+            "matched but in lower case.  Threshold values can be adjusted to accommodate barcode sequence mismatches from the reads." +
+            "The ExtractIlluminaBarcodes program also produces a metrics file and indicates the number of matches (and mismatches)" +
+            " between the barcode reads and the actual barcodes.  These metrics are provided both per-barcode and per lane and can be found in the BaseCalls directory.</p>" +
+            "<p>For poorly matching barcodes, the order of specification of barcodes can cause arbitrary output differences.</p>" +
+            "" +
+            "<h4>Usage example:</h4> " +
+                "<pre>" +
+                "java -jar picard.jar ExtractIlluminaBarcodes -h \\<br />" +
+        "              BASECALLS_DIR=s_1_1101.bcl \\<br />" +
+        "              READ_STRUCTURE=25T6B8B25T \\<br />" +
+        "              BARCODE_FILE=barcodes.txt or BARCODE=CAATAGCG \\<br />" +
+        "              METRICS_FILE=metrics_output.txt " +
+            "</pre>" +
+            "" +
+            "Please see the ExtractIlluminaBarcodes.BarcodeMetric " +
+            "<a href='http://broadinstitute.github.io/picard/picard-metric-definitions.html#ExtractIlluminaBarcodes.BarcodeMetric'>definitions</a> " +
+            "for a complete description of the metrics produced by this tool.  Note, metrics that say 'percent' are actually fractions.</p>" +
+            "<hr />"
+    ;
 
     // The following attributes define the command-line arguments
 

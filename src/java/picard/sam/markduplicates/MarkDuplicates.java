@@ -64,28 +64,35 @@ import java.util.*;
 )
 public class MarkDuplicates extends AbstractMarkDuplicatesCommandLineProgram {
     static final String USAGE_SUMMARY = "Identifies duplicate reads.  ";
-    static final String USAGE_DETAILS =
-            "This tool locates and tags duplicate reads (both PCR and optical/sequencing-driven) in a BAM or SAM file, where\n" +
-                    "duplicate reads are defined as originating from the same original fragment of DNA. Duplicates are identified as read\n" +
-                    "pairs having identical 5' positions (coordinate and strand) for both reads in a mate pair (and optionally, matching\n" +
-                    "unique molecular identifier reads; see BARCODE_TAG option). Optical, or more broadly Sequencing, duplicates are\n" +
-                    "duplicates that appear clustered together spatially during sequencing and can arise from optical/image-processing\n" +
-                    "artifacts or from bio-chemical processes during clonal amplification and sequencing; they are identified using the\n" +
-                    "READ_NAME_REGEX and the OPTICAL_DUPLICATE_PIXEL_DISTANCE options.\n" +
-                    "\n" +
-                    "The tool's main output is a new SAM or BAM file in which duplicates have been identified in the SAM flags field, or\n" +
-                    "optionally removed (see REMOVE_DUPLICATE and REMOVE_SEQUENCING_DUPLICATES), and optionally marked with a duplicate type\n" +
-                    "in the 'DT' optional attribute. In addition, it also outputs a metrics file containing the numbers of\n" +
-                    "READ_PAIRS_EXAMINED, UNMAPPED_READS, UNPAIRED_READS, UNPAIRED_READ DUPLICATES, READ_PAIR_DUPLICATES, and\n" +
-                    "READ_PAIR_OPTICAL_DUPLICATES.\n" +
-                    "\n" +
-                    "Usage example: java -jar picard.jar MarkDuplicates I=input.bam \\\n" +
-                    "                 O=marked_duplicates.bam M=marked_dup_metrics.txt\n" +
-                    "\n" +
-                    "The program can take either coordinate-sorted or query-sorted input, however the behavior is slightly different.\n" +
-                    "When the input is coordinate-sorted, unmapped mates of mapped records, and supplementary and secondary alignments are not\n" +
-                    "marked as duplicates. When the input is query-sorted (actually query-grouped) then unmapped mates get marked as their mapped\n" +
-                    "counter-parts, and secondary and supplementary reads get marked as the primary records with the same query-name.\n";
+    static final String USAGE_DETAILS = "<p>This tool locates and tags duplicate reads in a BAM or SAM file, where duplicate reads are " +
+            "defined as originating from a single fragment of DNA.  Duplicates can arise during sample preparation " +
+            "e.g. library construction using PCR.  For additional information on PCR-associated duplication artifacts, please see the documentation for the <a href='https://broadinstitute.github.io/picard/command-line-overview.html#EstimateLibraryComplexity'>EstimateLibraryComplexity</a> tool.  " +
+            "Alternatively, duplication artifacts can also arise from reads derived from a single amplification cluster, incorrectly detected as multiple clusters by the optical sensor of the sequencing instrument.  These duplication artifacts are referred to as optical duplicates.</p>" +
+            "" +
+            "<p>The READ_NAME_REGEX and the OPTICAL_DUPLICATE_PIXEL_DISTANCE arguments are the primary methods to identify and differentiate duplicate types.  " +
+            "The tool's main output is a new SAM or BAM file, in which duplicates have been identified in the SAM flags field.  Duplicates are marked using the 'DT' tag in the 'optional field' section of a SAM/BAM file.</p>"+
+            "" +
+            "In addition to a new SAM/BAM file with the 'DT' annotation, MarkDuplicates produces a metrics file indicating the numbers of " +
+            "duplicates for both single- and paired-end reads.  </p>  "+
+            "" +
+            "<p>The program can take either coordinate-sorted or query-sorted input, however the behavior is slightly different.  " +
+            "When the input is coordinate-sorted, unmapped mates of mapped records and supplementary/secondary alignments are not " +
+            "marked as duplicates.  However, when the input is query-sorted (actually query-grouped), " +
+            "then unmapped mates and secondary/supplementary reads are not excluded from the duplication test and can be marked as duplicate reads.  " +
+
+            "<p>If desired, duplicates can be removed using the REMOVE_DUPLICATE and REMOVE_SEQUENCING_DUPLICATES options.</p>" +
+            "" +
+            "<h4>Usage example:</h4>" +
+            "<pre>" +
+            "java -jar picard.jar MarkDuplicates \\<br />" +
+            "      I=input.bam \\<br />" +
+            "      O=marked_duplicates.bam \\<br />" +
+            "      M=marked_dup_metrics.txt" +
+            "</pre>" +
+            "" +
+            "Please see <a href='http://broadinstitute.github.io/picard/picard-metric-definitions.html#DuplicationMetrics'>MarkDuplicates</a> " +
+            "for detailed explanations of the output metrics." +
+            "<hr />";
 
     /** Enum used to control how duplicates are flagged in the DT optional tag on each read. */
     public enum DuplicateTaggingPolicy { DontTag, OpticalOnly, All }
