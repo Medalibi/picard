@@ -88,9 +88,9 @@ public class ScatterIntervalsByNs extends CommandLineProgram {
         }
     }
 
-    private final Log log = Log.getInstance(ScatterIntervalsByNs.class);
-    private final ProgressLogger locusProgress = new ProgressLogger(log, (int) 1e7, "examined", "loci");
-    private final ProgressLogger intervalProgress = new ProgressLogger(log, (int) 10, "found", "intervals");
+    private static final Log log = Log.getInstance(ScatterIntervalsByNs.class);
+    private static final ProgressLogger locusProgress = new ProgressLogger(log, (int) 1e7, "examined", "loci");
+    private static final ProgressLogger intervalProgress = new ProgressLogger(log, (int) 10, "found", "intervals");
 
     public static void main(final String[] args) {
         new ScatterIntervalsByNs().instanceMainWithExit(args);
@@ -130,7 +130,7 @@ public class ScatterIntervalsByNs extends CommandLineProgram {
      * Generate an interval list that alternates between Ns and ACGTs *
      * ****************************************************************
      */
-    public static IntervalList segregateReference(final ReferenceSequenceFile refFile, final int maxNmerToMerge) {
+    static IntervalList segregateReference(final ReferenceSequenceFile refFile, final int maxNmerToMerge) {
         final List<Interval> preliminaryIntervals = new LinkedList<>();
         final SAMFileHeader header = new SAMFileHeader();
         header.setSequenceDictionary(refFile.getSequenceDictionary());
@@ -147,6 +147,7 @@ public class ScatterIntervalsByNs extends CommandLineProgram {
             int start = 0;
 
             for (int i = 0; i < bytes.length; ++i) {
+                locusProgress.record(rec.getSequenceName(),i);
                 final boolean currentBaseIsN = SequenceUtil.isNoCall(bytes[i]);
 
                 //create intervals when switching, i.e "nBlockIsOpen" disagrees with "currentBaseIsN"
@@ -191,7 +192,9 @@ public class ScatterIntervalsByNs extends CommandLineProgram {
                 //and replace them with the newly created one
                 preliminaryIntervals.add(0, temp);
             } else { //if cannot merge top three intervals, transfer the top intervals to finalIntervals
-                finalIntervals.add(preliminaryIntervals.remove(0));
+                final Interval remove = preliminaryIntervals.remove(0);
+                finalIntervals.add(remove);
+                intervalProgress.record(remove.getContig(),remove.getStart());
             }
         }
         return finalIntervals;
