@@ -42,7 +42,7 @@ import java.util.Set;
         programGroup = Intervals.class
 )
 public class ScatterIntervalsByNs extends CommandLineProgram {
-    static final String USAGE_SUMMARY = "Writes an interval list based on splitting areference by Ns.  ";
+    static final String USAGE_SUMMARY = "Writes an interval list based on splitting a reference by Ns.  ";
     static final String USAGE_DETAILS = "This tool identifies positions in a reference where the bases are 'no-calls' and writes out an " +
             "interval-list using the resulting coordinates. This can be used to create an interval list for " +
             "whole genome sequence (WGS) for e.g. scatter-gather purposes, as an alternative to using fixed-length intervals. The number " +
