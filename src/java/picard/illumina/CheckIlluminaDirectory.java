@@ -36,9 +36,7 @@ import java.util.TreeSet;
 )
 public class CheckIlluminaDirectory extends CommandLineProgram {
     static final String USAGE_SUMMARY = "Asserts the validity for specified Illumina basecalling data.  ";
-    static final String USAGE_DETAILS = "<p>Checks that the basecall directory and the internal files are available, exist, and are reasonably sized " +
-            "for every tile and cycle.  Reasonably sized means non-zero sized for files that exist per tile and equal size for " +
-            "binary files that exist per cycle or per tile. If DATA_TYPES {Position, BaseCalls, QualityScores, Pf, or Barcodes} are not specified, then the default data types used by IlluminaBasecallsToSam are used.  " +
+    static final String USAGE_DETAILS = "<p>Checks that the basecall directory and the internal files are available, exist, and are reasonably sized for every tile and cycle.  Reasonably sized means non-zero sized for files that exist per tile and equal size for binary files that exist per cycle or per tile. If DATA_TYPES {Position, BaseCalls, QualityScores, Pf, or Barcodes} are not specified, then the default data types used by IlluminaBasecallsToSam are used.  " +
             "CheckIlluminaDirectory DOES NOT check that the individual records in a file are well-formed.</p>"     +
             "" +
             "<h4>Usage example:</h4> " +
