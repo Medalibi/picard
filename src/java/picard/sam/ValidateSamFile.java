@@ -58,18 +58,13 @@ import java.util.List;
 )
 public class ValidateSamFile extends CommandLineProgram {
     static final String USAGE_SUMMARY = "Validates a SAM or BAM file.  ";
-    static final String USAGE_DETAILS = "<p>This tool reports on the validity of a SAM or BAM file relative to the SAM format specification.  " +
-            "This is useful for troubleshooting errors encountered with other tools that may be caused by improper formatting, faulty alignments, incorrect flag values, etc. </p> " +
+    static final String USAGE_DETAILS = "<p>This tool reports on the validity of a SAM or BAM file relative to the SAM format specification.  This is useful for troubleshooting errors encountered with other tools that may be caused by improper formatting, faulty alignments, incorrect flag values, etc. </p> " +
 
-            "<p>By default, the tool runs in VERBOSE mode and will exit after finding 100 errors and output them to the console (stdout). " +
-            "Therefore, it is often more practical to run this tool initially using the MODE=SUMMARY option.  This mode outputs a summary " +
-            "table listing the numbers of all 'errors' and 'warnings'.</p> "+
+            "<p>By default, the tool runs in VERBOSE mode and will exit after finding 100 errors and output them to the console (stdout). Therefore, it is often more practical to run this tool initially using the MODE=SUMMARY option.  This mode outputs a summary table listing the numbers of all 'errors' and 'warnings'.</p> "+
 
-            "<p>When fixing errors in your file, it is often useful to prioritize the severe validation errors and ignore the errors/warnings of lesser concern.  This can be done " +
-            "using the IGNORE and/or IGNORE_WARNINGS arguments.  For helpful suggestions on error prioritization, please follow this link to obtain additional documentation on <a href='http://gatkforums.broadinstitute.org/gatk/discussion/6956'>ValidateSamFile</a>.</p>" +
+            "<p>When fixing errors in your file, it is often useful to prioritize the severe validation errors and ignore the errors/warnings of lesser concern.  This can be done using the IGNORE and/or IGNORE_WARNINGS arguments.  For helpful suggestions on error prioritization, please follow this link to obtain additional documentation on <a href='http://gatkforums.broadinstitute.org/gatk/discussion/6956'>ValidateSamFile</a>.</p>" +
 
-            "<p>After identifying and fixing your 'warnings/errors', we recommend that you rerun this tool to validate your SAM/BAM file " +
-            "prior to proceeding with your downstream analysis, to verify that all problems in your file have been addressed.</p>" +
+            "<p>After identifying and fixing your 'warnings/errors', we recommend that you rerun this tool to validate your SAM/BAM file prior to proceeding with your downstream analysis, to verify that all problems in your file have been addressed.</p>" +
             "<h4>Usage example:</h4>" +
             "<pre>" +
             "java -jar picard.jar ValidateSamFile \\<br />" +
