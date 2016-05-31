@@ -73,22 +73,30 @@ import java.util.Set;
   programGroup = Illumina.class
 )
 public class IlluminaBasecallsToFastq extends CommandLineProgram {
-  static final String USAGE_SUMMARY = "Generate fastq file(s) from Illumina basecall read data.  ";
+  static final String USAGE_SUMMARY = "Generate FASTQ file(s) from Illumina basecall read data.  ";
   static final String USAGE_DETAILS = "<p>This tool generates FASTQ files from data in an Illumina BaseCalls output directory.  " +
-          "Separate FASTQ files are created for each template, barcode, and index (molecular barcode) read.  Briefly, the template reads are the target sequence of your experiment, the barcode sequence reads facilitate sample demultiplexing, and the index reads help mitigate instrument phasing errors.  For additional information on the read types, please see the following reference <a href'=http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245947/'>here</a>.</p>" +
-          "<p>In the absence of sample pooling (multiplexing) and/or barcodes, then an OUTPUT_PREFIX (file directory) must be provided as the sample identifier.  For multiplexed samples, a MULTIPLEX_PARAMS file must be specified.  The MULTIPLEX_PARAMS file contains the list of sample barcodes used to sort template, barcode, and index reads.  It is essentially the same as the BARCODE_FILE used in the" +
-          "<a href='http://broadinstitute.github.io/picard/command-line-overview.html#ExtractIlluminaBarcodes'>ExtractIlluminaBarcodes</a> tool.     "+
+          "Separate FASTQ files are created for each template, barcode, and index (molecular barcode) read.  Briefly, the template reads " +
+          "are the target sequence of your experiment, the barcode sequence reads facilitate sample demultiplexing, and the index reads " +
+          "help mitigate instrument phasing errors.  For additional information on the read types, please see the following " +
+          "reference <a href'=http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245947/'>here</a>.</p>" +
           "" +
-          "<p>Files from this tool use the following naming format: {prefix}.{type}_{number}.fastq with the {prefix} indicating the sample barcode, " +
-          "the {type} indicating the types of reads e.g. index, barcode, or blank (if it contains a template read).  The {number} indicates the" +
-          " read number, either first (1) or second (2) for paired-end sequencing.  " +
+          "<p>In the absence of sample pooling (multiplexing) and/or barcodes, then an OUTPUT_PREFIX (file directory) must be " +
+          "provided as the sample identifier.  For multiplexed samples, a MULTIPLEX_PARAMS file must be specified.  " +
+          "The MULTIPLEX_PARAMS file contains the list of sample barcodes used to sort template, barcode, and index reads.  " +
+          "It is essentially the same as the BARCODE_FILE used in the" +
+          "<a href='http://broadinstitute.github.io/picard/command-line-overview.html#ExtractIlluminaBarcodes'>ExtractIlluminaBarcodes</a> " +
+          "tool.</p>     "+
+          "" +
+          "<p>Files from this tool use the following naming format: {prefix}.{type}_{number}.fastq with the {prefix} indicating the sample " +
+          "barcode, the {type} indicating the types of reads e.g. index, barcode, or blank (if it contains a template read).  " +
+          "The {number} indicates the read number, either first (1) or second (2) for paired-end sequencing. </p> " +
 
 "<h4>Usage examples:</h4>" +
 "<pre>" +
 "Example 1: Sample(s) with either no barcode or barcoded without multiplexing <br />" +
 "java -jar picard.jar IlluminaBasecallsToFastq \\<br />"+
 "      READ_STRUCTURE=25T8B25T \\<br />"+
-"      BASECALLS_DIR=s_1_1101.bcl \\<br />"+
+"      BASECALLS_DIR=Exp_bcl_dir \\<br />"+
 "      LANE=001 \\<br />"+
 "      OUTPUT_PREFIX=noBarcode.1 \\<br />"+
 "      RUN_BARCODE=run15 \\<br />"+
@@ -97,7 +105,7 @@ public class IlluminaBasecallsToFastq extends CommandLineProgram {
 "Example 2: Multiplexed samples <br />" +
 "java -jar picard.jar IlluminaBasecallsToFastq \\<br />"+
 "      READ_STRUCTURE=25T8B25T \\<br />"+
-"      BASECALLS_DIR=s_1_1101.bcl \\<br />"+
+"      BASECALLS_DIR=Exp_bcl_dir \\<br />"+
 "      LANE=001 \\<br />"+
 "      MULTIPLEX_PARAMS=demultiplexed_output.txt \\<br />"+
 "      RUN_BARCODE=run15 \\<br />"+
@@ -137,7 +145,7 @@ public class IlluminaBasecallsToFastq extends CommandLineProgram {
     @Option(doc = ReadStructure.PARAMETER_DOC, shortName = "RS")
     public String READ_STRUCTURE;
 
-    @Option(doc = "Tab-separated file for creating all output fastqs demultiplexed by barcode for a lane with single " +
+    @Option(doc = "Tab-separated file for creating all output FASTQs demultiplexed by barcode for a lane with single " +
             "IlluminaBasecallsToFastq invocation.  The columns are OUTPUT_PREFIX, and BARCODE_1, BARCODE_2 ... BARCODE_X " +
             "where X = number of barcodes per cluster (optional).  Row with BARCODE_1 set to 'N' is used to specify " +
             "an output_prefix for no barcode match.",
