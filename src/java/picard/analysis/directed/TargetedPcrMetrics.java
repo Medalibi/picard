@@ -20,7 +20,7 @@ public class TargetedPcrMetrics extends MultilevelMetrics {
     /** The total number of reads in the SAM or BAM file examined */
     public long TOTAL_READS;
 
-    /** The total number of reads that pass the vendor's quality filter */
+    /** The total number of passing filter (PF) reads*/
     public long PF_READS;
 
     /** The total number of bases within the PF_READS of the SAM or BAM file to be examined */
@@ -123,10 +123,20 @@ public class TargetedPcrMetrics extends MultilevelMetrics {
 	/** The fraction of bases corresponding to reads that map to target regions with with 30X or greater coverage depth. */
 	public double PCT_TARGET_BASES_30X;
 
-    /** A measure of how regions with low GC content (<= 50%), are undercovered relative to mean coverage. After binning the GC content [0..50], we calculate a = fraction of target territory, and b = fraction of aligned reads aligned to these targets for each bin.  AT DROPOUT is then abs(sum(a-b when a-b < 0)). For example, if the AT_DROPOUT value is 5% this implies that 5% of total reads that should have mapped to GC<=50% regions, mapped elsewhere. */
+    /**
+     * A measure of how regions with low GC content (<= 50%), are undercovered relative to mean coverage. After binning the GC content
+     * [0..50], we calculate a = fraction of target territory, and b = fraction of aligned reads aligned to these targets for each bin.
+     * AT DROPOUT is then abs(sum(a-b when a-b < 0)). For example, if the AT_DROPOUT value is 5% this implies that 5% of total reads that
+     * should have mapped to GC<=50% regions, mapped elsewhere.
+     * */
     public double AT_DROPOUT;
 
-    /** A measure of how regions of high GC content (>= 50% GC) are undercovered relative to the mean coverage value. For each GC bin [50..100], we calculate a = % of target territory, and b = % of aligned reads aligned to these targets.  GC DROPOUT is then abs(sum(a-b when a-b < 0)).  For example, if the value is 5%, this implies that 5% of total reads that should have mapped to GC>=50% regions, mapped elsewhere.*/
+    /**
+     * A measure of how regions of high GC content (>= 50% GC) are undercovered relative to the mean coverage value. For each GC bin
+     * [50..100], we calculate a = % of target territory, and b = % of aligned reads aligned to these targets.  GC DROPOUT is then
+     * abs(sum(a-b when a-b < 0)).  For example, if the value is 5%, this implies that 5% of total reads that should have mapped to
+     * GC>=50% regions, mapped elsewhere.
+     * */
     public double GC_DROPOUT;
 
     /** The theoretical HET SNP sensitivity. */
